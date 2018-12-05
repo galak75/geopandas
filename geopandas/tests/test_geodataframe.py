@@ -2,23 +2,22 @@ from __future__ import absolute_import
 
 import json
 import os
-import tempfile
 import shutil
+import tempfile
 
+import fiona
 import numpy as np
 import pandas as pd
-from shapely.geometry import Point, Polygon
-import fiona
-
-import geopandas
-from geopandas import GeoDataFrame, read_file, GeoSeries
-
 import pytest
 from pandas.util.testing import (
     assert_frame_equal, assert_index_equal, assert_series_equal)
+from shapely.geometry import Point, Polygon
+
+import geopandas
+from geopandas import GeoDataFrame, read_file, GeoSeries
+from geopandas.testing import assert_geodataframe_equal, assert_geoseries_equal
 from geopandas.tests.util import (
     connect, create_postgis, PACKAGE_DIR, validate_boro_df)
-from geopandas.testing import assert_geodataframe_equal, assert_geoseries_equal
 
 
 class TestDataFrame:
@@ -408,14 +407,6 @@ class TestDataFrame:
                     for i, dtype in enumerate(int_types))
         df = GeoDataFrame(data, geometry=geometry)
         df.to_file(tempfilename)
-
-    def test_mixed_types_to_file(self):
-        """ Test that mixed geometry types raise error when writing to file """
-        tempfilename = os.path.join(self.tempdir, 'test.shp')
-        s = GeoDataFrame({'geometry': [Point(0, 0),
-                                       Polygon([(0, 0), (1, 0), (1, 1)])]})
-        with pytest.raises(ValueError):
-            s.to_file(tempfilename)
 
     def test_empty_to_file(self):
         input_empty_df = GeoDataFrame()
