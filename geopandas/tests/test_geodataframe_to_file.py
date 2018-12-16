@@ -197,12 +197,12 @@ class TestGeoDataFrameToFile():
         self.do_test_geodataframe_to_file(geodataframe, ogr_driver)
 
     def test_write_gdf_with_mixed_geometries(self, mixed_geom_gdf, ogr_driver):
-        if ogr_driver == 'ESRI Shapefile':
-            with pytest.raises(Exception) as exception_info:
-                mixed_geom_gdf.to_file(self.output_file, driver=ogr_driver)
-            print("*** Exception_info: {}".format(exception_info))
-
-        else:
+        # if ogr_driver == 'ESRI Shapefile':
+        #     with pytest.raises(Exception) as exception_info:
+        #         mixed_geom_gdf.to_file(self.output_file, driver=ogr_driver)
+        #     print("*** Exception_info: {}".format(exception_info))
+        #
+        # else:
             self.do_test_geodataframe_to_file(mixed_geom_gdf, ogr_driver)
 
     def do_test_geodataframe_to_file(self, gdf, ogr_driver):
