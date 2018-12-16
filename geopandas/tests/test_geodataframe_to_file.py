@@ -179,7 +179,7 @@ def geodataframe(request):
 def mixed_geom_gdf(request):
     return request.param
 
-@pytest.fixture(params=['GeoJSON', 'ESRI Shapefile'])
+@pytest.fixture(params=['GeoJSON', 'ESRI Shapefile', 'GPKG', 'MapInfo File'])
 def ogr_driver(request):
     return request.param
 
