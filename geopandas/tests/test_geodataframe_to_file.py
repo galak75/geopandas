@@ -1,9 +1,9 @@
 import os
 import shutil
+import sys
 import tempfile
 
 import pytest
-import sys
 from shapely.geometry import Point, Polygon, MultiPolygon, MultiPoint, \
     LineString, MultiLineString
 
@@ -198,8 +198,19 @@ class TestGeoDataFrameToFile():
 
     def test_write_gdf_with_mixed_geometries(self, mixed_geom_gdf, ogr_driver):
         if ogr_driver == 'ESRI Shapefile':
-            with pytest.raises(Exception):
+            with pytest.raises(Exception) as exception_info:
                 mixed_geom_gdf.to_file(self.output_file, driver=ogr_driver)
+            print("*** Exception_info: {}".format(exception_info))
+            assert (
+                (exception_info.type == RuntimeError) or
+                (exception_info.type == ValueError and
+                 "Record's geometry type does not match collection schema's " +
+                 "geometry type" in str(exception_info)) or
+                (exception_info.type == AttributeError and
+                 "'list' object has no attribute 'lstrip'" in
+                 str(exception_info))
+            )
+
         else:
             self.do_test_geodataframe_to_file(mixed_geom_gdf, ogr_driver)
 
